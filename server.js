@@ -14,6 +14,8 @@ app.use('/api/auth', authRoutes);
 app.get('/', (req, res) => {
     res.send('API OK');
 });
+const registrationRoutes = require("./src/routes/registration.routes");
+app.use('/api/registrations', registrationRoutes);
 
 const PORT = process.env.PORT || 7777;
 app.use(

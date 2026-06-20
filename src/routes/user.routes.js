@@ -4,7 +4,7 @@ const {authenticate} = require("../middlewares/authenticates.js");
 const authorize = require("../middlewares/authorize.js");
 
 
-router.get("/reboot",authorize('admin'), authenticate, controller.reboot);
+router.get("/reboot",authenticate,authorize('superadmin'),  controller.reboot);
 router.get("/getUsers", controller.getUsers);
 router.get("/:id", controller.getUserById);
 router.put("/:id", controller.updateUser);

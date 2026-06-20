@@ -1,0 +1,1 @@
+router.post("/route", controller.getRoute);

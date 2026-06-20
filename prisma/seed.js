@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main(){
     const hashedPassword = await bcrypt.hash('mot de passe', 10);
 
-    await prsma.user.upsert({
+    await prisma.user.upsert({
         where: {
             email: 'admin@gmail.com'
         },
@@ -15,7 +15,8 @@ async function main(){
             username: 'admin',
             email: 'admin@gmail.com',
             password: hashedPassword,
-            Role: 'admin'
+            Role: 'superadmin',
+            isVerified: true
         }
     });
     console.log("Création de l'admin avec succes");

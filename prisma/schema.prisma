@@ -1,6 +1,6 @@
 enum Role {
   admin
-  public
+  superadmin
 }
 generator client {
   provider = "prisma-client-js"
@@ -16,7 +16,7 @@ model User {
   username     String         @unique
   email        String         @unique
   password     String
-  Role         Role           @default(public)
+  Role         Role           @default(admin)
 
   isVerified    Boolean        @default(false)
 
@@ -37,4 +37,21 @@ model RefreshToken {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime @default(now())
+}
+
+model RegistrationRequest {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String
+  password  String
+
+  status    RequestStatus   @default(attente)
+
+  createdAt DateTime @default(now())
+}
+
+enum RequestStatus {
+  attente
+  approuver
+  rejeter
 }
