@@ -1,46 +1,81 @@
-const {getUser, createUser, UpdateUser, deleteUser} = require("../services/user.service")
+const userService = require("../services/user.service");
 
-const getUsers = async (req, res)=>{
-    const user = await getUser()
-    return res.status(200).json({
-        user: user
-    })
-}
-const createUsers =async (req,res)=>{
-    const {name, email, password, role} = req.body //les donnée duis le front
+const {
+  sendSuccess,
+  sendError,
+} = require("../utils/response");
 
-    
-    if(!name || !email || !password) throw new Error("veuillez remplir les champs") //gestion d'erreur
-        
-        // gestion erreur Enum role
-        if(role){
-            if(role != "Admin" && role != "admin" && role != "Super_Admin" && role != "super_admin"){
-                throw new Error("role invalid")
-            }
-        }
-        
-    const newUser = await createUser(req.body) //appelle la fonction dans service
-    //renvoyer les données
-    return res.status(201).json({
-        message: "user creer avec succes",
-        data: newUser
-    })
-}
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await userService.getUsers();
 
-const UpdateUsers = async (req, res)=>{
-    const id = parseInt(req.params.id)
+    return sendSuccess(
+      res,
+      "Liste des utilisateurs",
+      users
+    );
+  } catch (error) {
+    return sendError(res, error.message);
+  }
+};
 
-    const user = await UpdateUser(id, req.body)
-    res.status(200).json({message: "mise à jour éfféctuer"})
-}
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await userService.getUserById(
+      parseInt(req.params.id)
+    );
 
+    return sendSuccess(
+      res,
+      "Utilisateur trouvé",
+      user
+    );
+  } catch (error) {
+    return sendError(res, error.message, 404);
+  }
+};
 
-const deleteUsers = async (req,res)=>{
-    const id = parseInt(req.params.id)
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await userService.updateUser(
+      parseInt(req.params.id),
+      req.body
+    );
 
-    await deleteUser(id)
+    return sendSuccess(
+      res,
+      "Utilisateur mis à jour",
+      user
+    );
+  } catch (error) {
+    return sendError(res, error.message);
+  }
+};
 
-    res.status(200).json({message: "l'utilisateur a été supprimer"})
-}
+exports.deleteUser = async (req, res) => {
+  try {
+    await userService.deleteUser(
+      parseInt(req.params.id)
+    );
 
-module.exports = {getUsers, createUsers, UpdateUsers, deleteUsers}
+    return sendSuccess(
+      res,
+      "Utilisateur supprimé"
+    );
+  } catch (error) {
+    return sendError(res, error.message);
+  }
+};
+
+exports.reboot = async (req, res) => {
+  try {
+    await userService.reboot();
+
+    return sendSuccess(
+      res,
+      "DB reset"
+    );
+  } catch (error) {
+    return sendError(res, error.message);
+  }
+};

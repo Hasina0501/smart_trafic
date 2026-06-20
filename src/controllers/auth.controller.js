@@ -1,31 +1,138 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-const { loginService, logoutService } = require("../services/auth.service")
-const { success, error } = require("../utils/response.utils")
+const authService =
+  require("../services/auth.service");
 
-const login = async (req, res) => {
-        try {
-                const { email, password } = req.body; // les donnés utile
-                if (!email || !password) res.status(500).json({ message: "les champs sont requis" }); //verification champ vide
+const {
+  sendSuccess,
+  sendCreated,
+  sendError,
+} = require("../utils/response");
 
+exports.register = async (req, res) => {
+  try {
+    const user =
+      await authService.register(req.body);
 
-                const connected = await loginService(req.body)
-                return success(res, connected, "vous etes connecter", 200);
-        } catch (error) {
-                return res.status(500).json({ error: error.message })
-        }
+    return sendCreated(
+      res,
+      "Vous êtes bien enregistré",
+      user
+    );
 
+  } catch (error) {
+
+    if (error.code === "P2002") {
+      return sendError(
+        res,
+        "Email déjà utilisé",
+        409
+      );
+    }
+
+    return sendError(
+      res,
+      error.message
+    );
+  }
 };
 
-const logOut = async (req, res) => {
-        try {
-                const userId = req.user.id // recupere depuis middleware
+exports.registerSU = async (req, res) => {
+  try {
+    const user =
+      await authService.registerSU(req.body);
 
-                await logoutService(userId)
-                res.status(200).json({ message: "Deconnexion reussi" })
+    return sendCreated(
+      res,
+      "Vous êtes admin",
+      user
+    );
 
-        } catch (error) {
-                throw new Error(error.message)
-        }
-}
-module.exports = { login, logOut }
+  } catch (error) {
+
+    if (error.code === "P2002") {
+      return sendError(
+        res,
+        "Email déjà utilisé",
+        409
+      );
+    }
+
+    return sendError(
+      res,
+      error.message
+    );
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const result =
+      await authService.login(req.body);
+
+    return sendSuccess(
+      res,
+      "Connexion réussie",
+      result
+    );
+
+  } catch (error) {
+
+    return sendError(
+      res,
+      error.message,
+      401
+    );
+  }
+};
+
+exports.refresh = async (req, res) => {
+  try {
+
+    const result =
+      await authService.refresh(
+        req.body.refreshToken
+      );
+
+    return sendSuccess(
+      res,
+      "Token refreshé",
+      result
+    );
+
+  } catch (error) {
+
+    return sendError(
+      res,
+      error.message,
+      401
+    );
+  }
+};
+
+exports.profile = async (req, res) => {
+  return sendSuccess(
+    res,
+    "Profil récupéré",
+    req.user
+  );
+};
+
+exports.logout = async (req, res) => {
+  try {
+
+    await authService.logout(
+      req.body.refreshToken
+    );
+
+    return sendSuccess(
+      res,
+      "Déconnexion réussie"
+    );
+
+  } catch (error) {
+
+    return sendError(
+      res,
+      error.message
+    );
+  }
+};
