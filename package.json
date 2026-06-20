@@ -1,0 +1,37 @@
+{
+  "name": "zenith-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "prisma:migrate:dev": "npx prisma migrate dev",
+    "prisma:migrate:deploy": "npx prisma migrate deploy",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio",
+    "prisma:seed": "node prisma/seed.js",
+    "seed:offers": "node script.js seed",
+    "list:offers": "node script.js list",
+    "clear:offers": "node script.js clear"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^8.0.4",
+    "svg-captcha": "^1.4.0"
+  },
+  "devDependencies": {
+    "joi": "^18.0.2",
+    "nodemon": "^3.1.14",
+    "prisma": "^6.12.0"
+  }
+}
