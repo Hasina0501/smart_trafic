@@ -4,7 +4,6 @@ const {authenticate }= require('../middlewares/authenticates.js');
 const authorize = require('../middlewares/authorize.js');
 
 router.post('/register', controller.register);
-router.post('/registerSU',authenticate, authorize('superadmin'), controller.registerSU);   
 router.post('/login', controller.login);
 router.post('/refresh', controller.refresh);
 router.get('/profile', authenticate, controller.profile);

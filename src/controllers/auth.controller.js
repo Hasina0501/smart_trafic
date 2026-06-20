@@ -35,34 +35,6 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.registerSU = async (req, res) => {
-  try {
-    const user =
-      await authService.registerSU(req.body);
-
-    return sendCreated(
-      res,
-      "Vous êtes admin",
-      user
-    );
-
-  } catch (error) {
-
-    if (error.code === "P2002") {
-      return sendError(
-        res,
-        "Email déjà utilisé",
-        409
-      );
-    }
-
-    return sendError(
-      res,
-      error.message
-    );
-  }
-};
-
 exports.login = async (req, res) => {
   try {
     const result =

@@ -27,27 +27,6 @@ const register = async ({ username, email, password }) => {
   return safeUser;
 };
 
-const registerSU = async ({ username, email, password }) => {
-  if (!validator.isEmail(email)) {
-    throw new Error("Email invalide");
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prisma.registrationRequest.create({
-    data: {
-      username,
-      email,
-      password: hashedPassword,
-      Role: "superadmin",
-    },
-  });
-
-  const { password: _, ...safeUser } = user;
-
-  return safeUser;
-};
-
 const login = async ({ email, password }) => {
   if (!validator.isEmail(email)) {
     throw new Error("Email invalide");
@@ -146,7 +125,6 @@ const logout = async (refreshToken) => {
 
 module.exports = {
   register,
-  registerSU,
   login,
   refresh,
   logout,
