@@ -1,10 +1,9 @@
 const router = require("express").Router();
-const controller = require("../controllers/user.controller.js");
+const controller = require("../controllers/.controller.js");
 const {authenticate} = require("../middlewares/authenticates.js");
 const authorize = require("../middlewares/authorize.js");
 
-
-router.get("/reboot",authorize('admin'), authenticate, controller.reboot);
+router.get("/reboot", authorize('admin'), authenticate, controller.reboot);
 router.get("/getUsers", controller.getUsers);
 router.get("/:id", controller.getUserById);
 router.put("/:id", controller.updateUser);

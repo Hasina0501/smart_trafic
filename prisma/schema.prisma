@@ -2,6 +2,11 @@ enum Role {
   admin
   public
 }
+enum Incident_Status{
+  pending
+  resolve
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -37,4 +42,22 @@ model RefreshToken {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime @default(now())
+}
+
+model ville {
+  id Int @id @default(autoincrement())
+  nomVille String 
+}
+
+model Incident {
+  id            Int      @id @default(autoincrement())
+  type          String
+  description   String?
+  imageUrl      String?
+  latitude      Float
+  longitude     Float
+  ville         String
+  status        Incident_Status @default(pending)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
