@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 node_modules/
 package-lock.json
 .env
 prisma/migrations
 /src/generated/prisma
 scripts/
+=======
+node_modules
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
+>>>>>>> cc86a7539ca34cf102da27cf62457d893cecccb4
