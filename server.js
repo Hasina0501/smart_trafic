@@ -1,10 +1,12 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/config/swagger");
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 //les noms des routes 
 
@@ -22,6 +24,8 @@ app.use('/api/incident', IncidentRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/registrations', registrationRoutes);
 
+
+
 //route de test
 app.get('/', (req, res) => {
     res.send('API OK');
@@ -29,7 +33,7 @@ app.get('/', (req, res) => {
 
 const { user } = require('./src/prisma');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.use(
     "/api-docs",
     swaggerUi.serve,
