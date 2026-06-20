@@ -1,6 +1,6 @@
 enum Role {
   admin
-  public
+  superadmin
 }
 enum Incident_Status{
   pending
@@ -21,7 +21,7 @@ model User {
   username     String         @unique
   email        String         @unique
   password     String
-  Role         Role           @default(public)
+  Role         Role           @default(admin)
 
   isVerified    Boolean        @default(false)
 
@@ -44,6 +44,7 @@ model RefreshToken {
   createdAt  DateTime @default(now())
 }
 
+
 model ville {
   id Int @id @default(autoincrement())
   nomVille String 
@@ -60,4 +61,21 @@ model Incident {
   status        Incident_Status @default(pending)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model RegistrationRequest {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String
+  password  String
+
+  status    RequestStatus   @default(attente)
+
+  createdAt DateTime @default(now())
+}
+
+enum RequestStatus {
+  attente
+  approuver
+  rejeter
 }

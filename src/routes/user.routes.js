@@ -1,12 +1,13 @@
 const router = require("express").Router();
-const controller = require("../controllers/.controller.js");
+const controller = require("../controllers/user.controller.js");
 const {authenticate} = require("../middlewares/authenticates.js");
 const authorize = require("../middlewares/authorize.js");
 
-router.get("/reboot", authorize('admin'), authenticate, controller.reboot);
+
+router.get("/reboot",authenticate,authorize('superadmin'),  controller.reboot);
 router.get("/getUsers", controller.getUsers);
-router.get("/:id", controller.getUserById);
-router.put("/:id", controller.updateUser);
-router.delete("/:id", controller.deleteUser);
+router.get("/getUser/:id", controller.getUserById);
+router.post("/updateUser/:id", controller.updateUser);
+router.delete("/deleteUser/:id", controller.deleteUser);
 
 module.exports = router;

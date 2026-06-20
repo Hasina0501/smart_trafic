@@ -12,11 +12,13 @@ module.exports.authenticate = (req, res, next) => {
             token,
             process.env.JWT_SECRET
         );
+        console.log(payload);
         req.user = payload;
 
         next();
     }
-    catch {
+    catch(error) {
+        console.log(error);
         return res.status(401).json({
             error: 'Token invalide'
         });

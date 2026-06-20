@@ -1,46 +1,52 @@
-const bcrypt = require('bcrypt')
-const {PrismaClient} = require('@prisma/client')
-const prisma = new PrismaClient()
 
-const getUser = async ()=>{
-    const user = await prisma.User.findMany()  // trouver toute les user
-    return user
-}
+const prisma = require("../prisma");
 
-const createUser = async (payload)=>{
-    const {name, email, password, role} = payload // les donnée utlis
+const getUsers = async () => {
+  return await prisma.user.findMany();
+};
 
-    const password_hasher = await bcrypt.hash(password, 10) // crypter le password
+const getUserById = async (id) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
 
-    return await prisma.User.create({
-        data: {
-            name: name,
-            email: email,
-            password: password_hasher,
-            role: role
-        }
-    })
-}
+  if (!user) {
+    throw new Error("Utilisateur introuvable");
+  }
 
+  return user;
+};
 
-const UpdateUser = async (id, data)=>{ 
+const updateUser = async (id, data) => {
+  const { username, email, password } = data;
 
-    
-    if(data.password){
-        const salt = await bcrypt.genSalt(10)
+  return await prisma.user.update({
+    where: { id },
+    data: {
+      username,
+      email,
+      password,
+      isVerified: true
+    },
+  });
+};
 
-        data.password = await bcrypt.hash(data.password, salt)
-    }
-    return await prisma.User.update({
-        where: { id },
-        data
-    })
-}
+const deleteUser = async (id) => {
+  await prisma.user.delete({
+    where: { id },
+  });
+};
 
-const deleteUser = async (id)=>{
-    return await prisma.User.delete({
-        where: { id }
-    })
-}
+const reboot = async () => {
+  await prisma.$executeRawUnsafe(
+    `TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`
+  );
+};
 
-module.exports = {getUser, createUser, UpdateUser, deleteUser}
+module.exports = {
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  reboot,
+};
