@@ -15,6 +15,6 @@ router.get('/:id', incidentController.getById)
 // accept form-data with optional file field 'image'
 router.post('/create_incident', upload.single('image'), incidentController.create)
 router.post('/update_incident/:id', incidentController.update)
-router.post('/delete_incident/:id', incidentController.delete)
+router.delete('/delete_incident/:id', incidentController.delete)
 
 module.exports = router
