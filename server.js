@@ -3,9 +3,11 @@ require('dotenv').config();
 const express = require('express');
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/config/swagger");
+const cors = require("cors");
+
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 //les noms des routes 
 
 const authRoutes = require('./src/routes/auth.routes');
@@ -29,7 +31,7 @@ app.get('/', (req, res) => {
 
 const { user } = require('./src/prisma');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.use(
     "/api-docs",
     swaggerUi.serve,
