@@ -1,10 +1,6 @@
 enum Role {
   admin
-  public
-}
-enum Incident_Status{
-  pending
-  resolve
+  superadmin
 }
 
 generator client {
@@ -17,30 +13,29 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  Role         Role           @default(public)
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  Role     Role   @default(admin)
 
-  isVerified    Boolean        @default(false)
+  isVerified Boolean @default(false)
 
   refreshTokens RefreshToken[]
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model RefreshToken {
-  id         Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  token      String   @unique
-  expiresAt  DateTime
-  revoked    Boolean  @default(false)
+  token     String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
 
-  userId     Int      
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
 }
 
@@ -60,4 +55,63 @@ model Incident {
   status        Incident_Status @default(pending)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model RegistrationRequest {
+  id       Int    @id @default(autoincrement())
+  username String
+  email    String
+  password String
+
+  status RequestStatus @default(attente)
+
+  createdAt DateTime @default(now())
+}
+
+enum RequestStatus {
+  attente
+  approuver
+  rejeter
+}
+
+model Road {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isClosed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  startLat  Float
+  startLng  Float
+
+  endLat    Float
+  endLng    Float
+
+  distance  Float
+  traffic   Float @default(1)
+}
+model Incident {
+  id          Int      @id @default(autoincrement())
+
+  title       String
+  description String?
+
+  latitude    Float
+  longitude   Float
+
+  imageUrl   String?
+
+  status      IncidentStatus @default(attente)
+
+  severity    Int
+
+  city        String
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+enum IncidentStatus {
+  attente
+  vérifié
+  rejeté
 }

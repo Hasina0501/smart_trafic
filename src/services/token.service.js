@@ -5,7 +5,7 @@ generateAccessToken = (user) => {
     return jwt.sign(
         {
             sub: user.id,
-            role: user.role
+            role: user.Role
         },
         process.env.JWT_SECRET,
         {
