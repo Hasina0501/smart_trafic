@@ -1,3 +1,4 @@
+
 const prisma = require("../prisma");
 
 const getUsers = async () => {
@@ -25,6 +26,7 @@ const updateUser = async (id, data) => {
       username,
       email,
       password,
+      isVerified: true
     },
   });
 };

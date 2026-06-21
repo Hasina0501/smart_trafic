@@ -1,41 +1,44 @@
 require('dotenv').config();
 
 const express = require('express');
-const userRoutes = require('./src/routes/user.routes');
-const authRoutes = require('./src/routes/auth.routes');
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/config/swagger");
 const app = express();
-const routeRoutes = require("./src/routes/route.routes");
-const incidentRoutes = require("./src/routes/incident.routes");
-const publicationRoutes = require("./src/routes/publication.routes");
+app.use(express.json());
+app.use(cors());
+
+//les noms des routes 
+
+const authRoutes = require('./src/routes/auth.routes');
+const villeRoutes = require('./src/routes/ville.route')
+const IncidentRoutes = require('./src/routes/incident.route')
+const userRoutes = require("./src/routes/user.routes")
 const registrationRoutes = require("./src/routes/registration.routes");
 
-app.use(express.json());
-app.use('/api/incidents', incidentRoutes)
-app.use('/api/users', userRoutes);
-app.use('/api/routes', routeRoutes);
+//les apis des routes par defaut
+
 app.use('/api/auth', authRoutes);
+app.use('/api/ville', villeRoutes)
+app.use('/api/incident', IncidentRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/registrations', registrationRoutes);
+
+
+
+//route de test
 app.get('/', (req, res) => {
     res.send('API OK');
 });
-const PORT = process.env.PORT || 7777;
 
-app.use(
-    '/api/registrations', 
-    registrationRoutes
-);
+const { user } = require('./src/prisma');
+
+const PORT = process.env.PORT || 5000;
 app.use(
     "/api-docs",
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec)
 );
-
-app.use(
-  "/api/publications",
-  publicationRoutes
-);
-
 app.listen(PORT, () => {
     console.log('Server running on port '+ PORT);
 });

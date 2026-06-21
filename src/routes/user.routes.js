@@ -5,9 +5,9 @@ const authorize = require("../middlewares/authorize.js");
 
 
 router.get("/reboot",authenticate,authorize('superadmin'),  controller.reboot);
-router.get("/getUsers",authenticate, authorize("superadmin", "admin"), controller.getUsers);
-router.get("/:id",authenticate, authorize("superadmin"),  controller.getUserById);
-router.put("/:id", controller.updateUser);
-router.delete("/:id",authenticate, authorize("superadmin"),  controller.deleteUser);
+router.get("/getUsers", controller.getUsers);
+router.get("/getUser/:id", controller.getUserById);
+router.post("/updateUser/:id", controller.updateUser);
+router.delete("/deleteUser/:id", controller.deleteUser);
 
 module.exports = router;
