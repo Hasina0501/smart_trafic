@@ -63,38 +63,54 @@ model Road {
   isClosed  Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  startLat  Float
-  startLng  Float
+  startLat Float
+  startLng Float
 
-  endLat    Float
-  endLng    Float
+  endLat Float
+  endLng Float
 
-  distance  Float
-  traffic   Float @default(1)
+  distance Float
+  traffic  Float @default(1)
 }
+
 model Incident {
-  id          Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   title       String
   description String?
 
-  latitude    Float
-  longitude   Float
+  latitude  Float
+  longitude Float
 
-  imageUrl   String?
+  imageUrl String?
 
-  status      IncidentStatus @default(attente)
+  status IncidentStatus @default(attente)
 
-  severity    Int
+  severity Int
 
-  city        String
+  city String
 
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  publications Publication[]
 }
 
 enum IncidentStatus {
   attente
   vérifié
   rejeté
+}
+
+model Publication {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+
+  incidentId Int?
+  incident   Incident? @relation(fields: [incidentId], references: [id], onDelete: SetNull)
+
+  isPublished Boolean @default(true)
+
+  createdAt DateTime @default(now())
 }

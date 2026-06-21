@@ -2,7 +2,7 @@ const prisma = require("../prisma");
 
 const buildGraph = (roads) => {
   const graph = {};
-
+  
   roads.forEach((road) => {
     const start = `${road.startLat},${road.startLng}`;
     const end = `${road.endLat},${road.endLng}`;
@@ -79,7 +79,8 @@ const calculate = async (start, end) => {
     }
 
     visited.add(current);
-
+    console.log("current =", current);
+console.log("graph[current] =", graph[current]);
     graph[current].forEach((neighbor) => {
       const newDistance =
         distances[current] + neighbor.cost;
