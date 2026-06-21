@@ -1,5 +1,5 @@
 const authService =
-  require("../services/auth.service");
+  require("../services/auth.service.js");
 
 const {
   sendSuccess,
@@ -38,8 +38,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const result =
-      await authService.login(req.body);
-
+    await authService.login(req.body);
+    
+    console.log(req.body);
     return sendSuccess(
       res,
       "Connexion réussie",

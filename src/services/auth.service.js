@@ -31,7 +31,6 @@ const login = async ({ email, password }) => {
   if (!validator.isEmail(email)) {
     throw new Error("Email invalide");
   }
-
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -39,7 +38,6 @@ const login = async ({ email, password }) => {
   if (!user) {
     throw new Error("Email ou mot de passe incorrect");
   }
-
   const isValid = await bcrypt.compare(password, user.password);
 
   if (!isValid) {
